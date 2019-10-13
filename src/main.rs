@@ -16,11 +16,11 @@ fn main() -> Result<(), Box<dyn Error>> {
                 .short("p")
                 .long("pager")
                 .value_name("PAGER")
-                .help("Select which pager program to use ")
+                .help("Prints name of last edited file, or use -p to Select which pager program to use.")
                 .takes_value(true),
         )
         .get_matches();
-    let pager = matches.value_of("pager").unwrap_or("less");
+    let pager = matches.value_of("pager").unwrap_or("echo");
 
     let work_dir = current_dir()?;
     let dir_iter = read_dir(work_dir.clone())?;
