@@ -1,0 +1,3 @@
+Returns the last edited file.
+
+Use `lol -p less` to open with command line utility `less`.
