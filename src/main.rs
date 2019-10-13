@@ -20,7 +20,7 @@ fn main() -> Result<(), Box<dyn Error>> {
                 .takes_value(true),
         )
         .get_matches();
-    let pager = matches.value_of("pager").unwrap_or("less");
+    let pager = matches.value_of("pager").unwrap_or("echo");
 
     let work_dir = current_dir()?;
     let dir_iter = read_dir(work_dir.clone())?;
