@@ -44,7 +44,11 @@ fn main() -> Result<(), Box<dyn Error>> {
         Some(file) => file,
     };
 
-    Command::new(pager).arg(recent_file.path()).exec();
+    if pager == "echo" {
+        println!("{}", recent_file.path().into_os_string().into_string().unwrap());
+    } else {
+        Command::new(pager).arg(recent_file.path()).exec();
+    }
 
     Ok(())
 }
