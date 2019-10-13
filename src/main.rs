@@ -16,11 +16,16 @@ fn main() -> Result<(), Box<dyn Error>> {
                 .short("p")
                 .long("pager")
                 .value_name("PAGER")
-                .help("Prints name of last edited file, or use -p to Select which pager program to use.")
+                .help("Prints name of last edited file, or use -p to select which pager program to use.")
                 .takes_value(true),
         )
         .get_matches();
-    let pager = matches.value_of("pager").unwrap_or("echo");
+
+    let mut use_pager = true;
+    let pager = matches.value_of("pager").unwrap_or_else(||{
+    	use_pager = false;
+	return "no_pager_str";
+    });
 
     let work_dir = current_dir()?;
     let dir_iter = read_dir(work_dir.clone())?;
@@ -44,10 +49,10 @@ fn main() -> Result<(), Box<dyn Error>> {
         Some(file) => file,
     };
 
-    if pager == "echo" {
-        println!("{}", recent_file.path().into_os_string().into_string().unwrap());
+    if use_pager {
+       Command::new(pager).arg(recent_file.path()).exec();
     } else {
-        Command::new(pager).arg(recent_file.path()).exec();
+       println!("{}", recent_file.path().into_os_string().into_string().unwrap());
     }
 
     Ok(())
