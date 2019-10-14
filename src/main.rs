@@ -8,7 +8,7 @@ use clap::{App, Arg};
 
 fn main() -> Result<(), Box<dyn Error>> {
     let matches = App::new("Lol - Last opened log viewer")
-        .version("0.1")
+        .version("0.2")
         .author("Max B. <blachmanmax@gmail.com>")
         .about("view last modified file using a pager")
         .arg(
@@ -20,7 +20,6 @@ fn main() -> Result<(), Box<dyn Error>> {
                 .takes_value(true),
         )
         .get_matches();
-    let pager = matches.value_of("pager").unwrap_or("less");
 
     let work_dir = current_dir()?;
     let dir_iter = read_dir(work_dir.clone())?;
@@ -44,7 +43,10 @@ fn main() -> Result<(), Box<dyn Error>> {
         Some(file) => file,
     };
 
-    Command::new(pager).arg(recent_file.path()).exec();
+    match matches.value_of("pager") {
+        Some(pager) => {Command::new(pager).arg(recent_file.path()).exec();},
+        None => println!("{}", recent_file.path().into_os_string().into_string().unwrap())
+    };
 
     Ok(())
 }
